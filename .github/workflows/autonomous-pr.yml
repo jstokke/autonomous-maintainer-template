@@ -1,0 +1,17 @@
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  create-pr:
+    if: contains(github.event.issue.labels.*.name, 'autonomous')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "Invoke Copilot / autonomous agent here"
+          # Agent creates branch + PR
+      - run: gh issue edit $ISSUE_NUMBER --add-label autonomous-pr-opened
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

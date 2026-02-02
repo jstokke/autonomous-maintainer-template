@@ -1,0 +1,13 @@
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  escalate:
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh issue edit $ISSUE_NUMBER --add-label needs-human
+        env:
+          ISSUE_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

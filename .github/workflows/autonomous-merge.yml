@@ -1,0 +1,14 @@
+on:
+  pull_request:
+    types: [opened, synchronize, labeled]
+
+jobs:
+  merge:
+    if: contains(github.event.pull_request.labels.*.name, 'autonomous')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/check-invariants.sh
+      - run: gh pr merge --auto --squash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
