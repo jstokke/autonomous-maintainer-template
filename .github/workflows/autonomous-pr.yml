@@ -2,6 +2,11 @@ on:
   issues:
     types: [labeled]
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   create-pr:
     if: contains(github.event.issue.labels.*.name, 'autonomous')
@@ -11,6 +16,8 @@ jobs:
       - run: |
           echo "Invoke Copilot / autonomous agent here"
           # Agent creates branch + PR
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
       - run: gh issue edit $ISSUE_NUMBER --add-label autonomous-pr-opened
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}

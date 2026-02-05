@@ -2,6 +2,10 @@ on:
   issues:
     types: [opened, labeled]
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   validate:
     if: contains(github.event.issue.labels.*.name, 'autonomous')

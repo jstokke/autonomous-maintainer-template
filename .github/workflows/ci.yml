@@ -1,14 +1,14 @@
 on:
   pull_request:
-    types: [opened, synchronize, labeled]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
 
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
-  merge:
-    if: contains(github.event.pull_request.labels.*.name, 'autonomous')
+  script-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,6 +16,3 @@ jobs:
           fetch-depth: 0
       - run: ./scripts/run-tests.sh
       - run: ./scripts/check-invariants.sh
-      - run: gh pr merge --auto --squash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

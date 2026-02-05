@@ -2,9 +2,12 @@ on:
   pull_request:
     types: [closed]
 
+permissions:
+  issues: write
+
 jobs:
   escalate:
-    if: failure()
+    if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     steps:
       - run: gh issue edit $ISSUE_NUMBER --add-label needs-human
